@@ -1,8 +1,21 @@
 var express = require("express")
 var app = express()
+const mongoose = require('mongoose');
+
 app.use(express.static(__dirname + '/public'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+
+//app.get('/api/projects', (req, res) => {
+//res.json({ statusCode: 200, data: cardList, message: "Success" })
+//})
+
+mongoose.connect('mongodb://localhost:27017/myprojectDB', {
+    //useNewUrlParser: true,
+    // useUnifiedTopology: true,
+});
+
 const cardList = [
     {
         title: "Lion",
@@ -23,9 +36,28 @@ const cardList = [
         description: "Elephants are the largest land mammals on earth and have distinctly massive bodies, large ears, and long trunks. They use their trunks to pick up objects, trumpet warnings, greet other elephants, or suck up water for drinking or bathing, among other uses. Both male and female African elephants grow tusks and each individual can either be left- or right-tusked, and the one they use more is usually smaller because of wear and tear. Elephant tusks serve many purposes. These extended teeth can be used to protect the elephant's trunk, lift and move objects, gather food, and strip bark from trees. They can also be used for defense. During times of drought, elephants even use their tusks to dig holes to find water underground."
     }
 ]
-app.get('/api/projects', (req, res) => {
-    res.json({ statusCode: 200, data: cardList, message: "Success" })
-})
+
+const ProjectSchema = new mongoose.Schema({
+    title: String,
+    image: String,
+    link: String,
+    description: String,
+});
+
+const Project = mongoose.model('Project', ProjectSchema);
+
+mongoose.connection.once('open', async () => {
+    console.log('Connected to MongoDB!');
+    
+        const count = await Project.countDocuments({}); 
+        await Project.insertMany(cardList); 
+});
+
+app.get('/api/projects', async (req, res) => {
+    const projects = await Project.find({});
+    res.json({ statusCode: 200, data: projects, message: "Success" });
+});
+
 var port = process.env.port || 3000;
 app.listen(port, () => {
     console.log("App listening to: " + port)
