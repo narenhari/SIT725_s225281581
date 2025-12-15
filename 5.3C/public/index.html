@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books Catalog</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .main-content {
+            display: flex;
+            gap: 40px;
+        }
+        #bookListContainer { flex: 1; }
+        #bookDetailsContainer { flex: 2; border-left: 1px solid #ccc; padding-left: 20px; }
+        #bookListContainer ul {
+            list-style: none;
+            padding: 0;
+            cursor: pointer;
+        }
+        #bookListContainer li {
+            padding: 5px;
+            border-bottom: 1px dashed #ccc;
+            margin-bottom: 5px;
+        }
+        #bookListContainer li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Book Catalog</h1>
+
+    <h2>Books Catalog Developed by s225281581</h2>
+
+    <p>Click the button below to see all books</p>
+
+    <button id="getAllBooksButton">Get all books</button>
+    <hr>
+
+    <div class="main-content">
+        <div id="bookListContainer">
+            <h3>Book List</h3>
+            <p>Click the button to see available books.</p>
+        </div>
+
+        <div id="bookDetailsContainer">
+            <h3>Book Details</h3>
+            <p>Select a book from the list for details.</p>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = 'http://localhost:3004/api/books';
+        const getAllBooksButton = document.getElementById('getAllBooksButton');
+        const bookListContainer = document.getElementById('bookListContainer'); 
+        const bookDetailsContainer = document.getElementById('bookDetailsContainer'); 
+
+        async function fetchAndRenderAllBooks() {
+            bookListContainer.innerHTML = '<h3>Book List (Title and Price)</h3><p>Loading...</p>';
+            bookDetailsContainer.innerHTML = '<h3>Book Details</h3>';
+
+            try {
+                const response = await fetch(API_BASE_URL);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const result = await response.json();
+                const books = result.data;
+
+                let listHTML = '<ul>';
+                
+                books.forEach(book => {
+                    const displayPrice = book.price && book.price.$numberDecimal ? book.price.$numberDecimal : 'N/A';
+                    listHTML += `
+                        <li data-book-id="${book.id}">
+                            ${book.title} - ${displayPrice} AUD
+                        </li>
+                    `;
+                });
+                listHTML += '</ul>';
+                
+                bookListContainer.innerHTML = `<h3>Book List (Title and Price)</h3>${listHTML}`;
+
+                bookListContainer.querySelector('ul').addEventListener('click', (event) => {
+                    const li = event.target.closest('li');
+                    if (li && li.dataset.bookId) {
+                        fetchAndRenderBookDetails(li.dataset.bookId);
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error fetching books:', error);
+                bookListContainer.innerHTML = '<h3>Book List</h3><p style="color:red;">Error loading book list. Check server status.</p>';
+            }
+        }
+
+        async function fetchAndRenderBookDetails(bookId) {
+            bookDetailsContainer.innerHTML = `<h3>Book Details</h3><p>Loading details for ${bookId}...</p>`;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/${bookId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const book = result.data; 
+                const displayPrice = book.price && book.price.$numberDecimal ? book.price.$numberDecimal : 'N/A';
+
+                bookDetailsContainer.innerHTML = `
+                    <h3>${book.title}</h3>
+                    <p><strong>ID:</strong> ${book.id}</p>
+                    <p><strong>Author:</strong> ${book.author}</p>
+                    <p><strong>Year:</strong> ${book.year}</p>
+                    <p><strong>Genre:</strong> ${book.genre}</p>
+                    <p><strong>Summary:</strong> ${book.summary}</p>
+                    <p><strong>Price (AUD):</strong> ${displayPrice}</p>
+                `;
+            } catch (error) {
+                console.error(`Error fetching details for book ID ${bookId}:`, error);
+                bookDetailsContainer.innerHTML = '<h3>Book Details</h3><p style="color:red;">Error loading book details.</p>';
+            }
+        }
+
+        getAllBooksButton.addEventListener('click', fetchAndRenderAllBooks);
+    </script>
+</body>
+
+</html>
