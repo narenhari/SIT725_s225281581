@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+</head>
+<body>
+    <h1>Addition calculator</h1>
+
+    <form id="calculatorForm">
+        <label for="num1">Number 1:</label>
+        <input type="number" id="num1" required>
+
+        <label for="num2">Number 2:</label>
+        <input type="number" id="num2" required>
+
+        <button type="submit">Calculate Addition</button>
+    </form>
+
+    <div id="result">
+        Click the button
+    </div>
+
+    <script>
+        document.getElementById('calculatorForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const num1 = document.getElementById('num1').value;
+            const num2 = document.getElementById('num2').value;
+            const res = document.getElementById('result');
+
+            const apiUrl = `/add?num1=${num1}&num2=${num2}`;
+
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                res.innerHTML = `<p>Sum: ${data.result}</p>`;
+        });
+    </script>
+</body>
+</html>
