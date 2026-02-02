@@ -1,0 +1,384 @@
+/**
+ * Service layer responsbile for interacting with Sleep Entries model.
+ */
+const { SleepEntry } = require("../models")
+
+/**
+ * Parse a date string and normalize to midnight.
+ * - Plain dates (YYYY-MM-DD) are treated as LOCAL dates.
+ * - Full ISO date-times (with time component) use the built-in parser.
+ * @param dateString - date string to parse
+ * @param normalize - whether to normalize to midnight (default: true)
+ * @returns {Date} - parsed Date object
+ * @throws {Error} - if dateString is invalid
+ */
+function parseDate(dateString, normalize = false) {
+    let date;
+
+    if (dateString instanceof Date) {
+        date = new Date(dateString.getTime());
+    } else if (typeof dateString === 'string') {
+        // Detect plain date (YYYY-MM-DD) and parse as local time
+        const plainDateMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateString);
+        if (plainDateMatch) {
+            const year = parseInt(plainDateMatch[1], 10);
+            const month = parseInt(plainDateMatch[2], 10) - 1; // JS months are 0-based
+            const day = parseInt(plainDateMatch[3], 10);
+            date = new Date(year, month, day);
+        } else {
+            // Fallback to native parsing for full date-times
+            date = new Date(dateString);
+        }
+    } else {
+        date = new Date(dateString);
+    }
+
+    if (isNaN(date.getTime())) {
+        throw new Error('Invalid date format');
+    }
+
+    if (normalize) {
+        date.setHours(0, 0, 0, 0);
+    }
+
+    return date;
+}
+
+/**
+ * Prepares and validates sleep entry data.
+ * @param entryData - raw entry data. Expected fields are:
+ * - entryTime {string} - the date for the sleep entry
+ * - startTime {string} - the date-time when sleep started
+ * - endTime {string} - the date-time when sleep ended
+ * - duration {int} - total minutes slept (0-1440)
+ * - rating {int} - sleep quality rating (0-10)
+ * Other fields are ignored.
+ * @returns {Object} - prepared and validated entry data
+ * @throws {Error} - if validation fails
+ */
+function prepareSleepEntryData(entryData) {
+    const { entryTime, startTime, endTime, duration, rating } = entryData;
+
+    // Validate entryTime is provided
+    if (!entryTime) {
+        throw new Error('Entry date is required');
+    }
+
+    // Validate entryTime and normalize to midnight
+    let entryDate = null;
+    try {
+        entryDate = parseDate(entryTime, true);
+    } catch (err) {
+        throw new Error('Entry date must be a valid');
+    }
+
+    // Validate rating if provided
+    if (rating !== undefined && rating !== null) {
+        if (typeof rating !== 'number' || rating < 0 || rating > 10) {
+            throw new Error('Rating must be a number between 0 and 10');
+        }
+    }
+
+    // Check that either duration or both startTime and endTime are supplied
+    const hasDuration = duration !== undefined && duration !== null;
+    const hasStartTime = startTime !== undefined && startTime !== null;
+    const hasEndTime = endTime !== undefined && endTime !== null;
+
+    // Validate that we have either duration OR both startTime and endTime
+    if (!hasDuration && (!hasStartTime || !hasEndTime)) {
+        throw new Error('Either sleep duration or both start and end time must be provided');
+    }
+
+    // If only one of startTime or endTime is provided, refuse
+    if ((hasStartTime && !hasEndTime) || (!hasStartTime && hasEndTime)) {
+        throw new Error('Both start and end time must be provided');
+    }
+
+    let calculatedDuration = duration;
+    let finalStartTime = null;
+    let finalEndTime = null;
+
+    // If both startTime and endTime are provided, use them to calculate duration
+    if (hasStartTime && hasEndTime) {
+        // Convert date values to Date objects
+        let startDate = null;
+        try {
+            startDate = parseDate(startTime);
+        } catch (err) {
+            throw new Error('Start time must be a valid date');
+        }
+        let endDate = null;
+        try {
+            endDate = parseDate(endTime);
+        } catch (err) {
+            throw new Error('End time must be a valid date');
+        }
+
+        // Allow start date to be either the entry date or the following day
+        const sameDay =
+            startDate.getFullYear() === entryDate.getFullYear() &&
+            startDate.getMonth() === entryDate.getMonth() &&
+            startDate.getDate() === entryDate.getDate();
+
+        const nextDayCandidate = new Date(entryDate);
+        nextDayCandidate.setDate(nextDayCandidate.getDate() + 1);
+
+        const isNextDay =
+            startDate.getFullYear() === nextDayCandidate.getFullYear() &&
+            startDate.getMonth() === nextDayCandidate.getMonth() &&
+            startDate.getDate() === nextDayCandidate.getDate();
+
+        if (!sameDay && !isNextDay) {
+            throw new Error(
+                `Start date must match entry date or the following day ` +
+                `(entryDate=${entryDate.toISOString()}, startDate=${startDate.toISOString()}, ` +
+                `rawEntryTime=${entryTime}, rawStartTime=${startTime})`
+            );
+        }
+
+        // Verify endDate is not before startDate
+        if (endDate < startDate) {
+            throw new Error('End time must be the same as or later than start time');
+        }
+
+        // Verify endTime is not more than 24 hours after startTime
+        const maxEndTime = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+        if (endDate > maxEndTime) {
+            throw new Error('End time cannot be more than 24 hours after start time');
+        }
+
+        // Calculate duration in minutes
+        const diffMs = endDate.getTime() - startDate.getTime();
+        calculatedDuration = Math.round(diffMs / (1000 * 60));
+
+        // Store the Date objects
+        finalStartTime = startDate;
+        finalEndTime = endDate;
+    }
+
+    // Validate calculated duration
+    if (calculatedDuration > 1440) {
+        throw new Error('Sleep duration cannot exceed 24 hours');
+    }
+
+    // Check for if sleep duration is negative
+    if (calculatedDuration < 0) {
+        throw new Error('Sleep duration cannot be negative');
+    }
+
+    // Check if sleep duration is provided or calculated
+    if (calculatedDuration === 0) {
+        throw new Error('Please provide a valid sleep duration or start and end time');
+    }
+
+    // Build and return the prepared entry data
+    const preparedData = {
+        entryDate,  // Use entryDate (Date object) not entryTime (string)
+        duration: calculatedDuration,
+        rating: rating !== undefined && rating !== null ? rating : null
+    };
+
+    // Only include startTime and endTime if they were provided (as Date objects)
+    if (finalStartTime && finalEndTime) {
+        preparedData.startTime = finalStartTime;
+        preparedData.endTime = finalEndTime;
+    }
+
+    return preparedData;
+}
+
+/**
+ * Fetch sleep entries for a user with pagination.
+ * @param userId - ID of the user object
+ * @param page - page number for pagination
+ * @param limit - number of entries per page
+ * @param startDate - optional start date for filtering (inclusive)
+ * @param endDate - optional end date for filtering (inclusive)
+ * @returns {Promise<Object>} - object containing sleep entries and pagination info
+ */
+async function getSleepEntries(userId, page, limit, startDate = null, endDate = null) {
+    const skip = (page - 1) * limit;
+
+    // Build query with optional date range filtering
+    const query = { userId };
+
+    if (startDate || endDate) {
+        query.entryDate = {};
+        if (startDate) {
+            const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0);
+            query.entryDate.$gte = start;
+        }
+        if (endDate) {
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            query.entryDate.$lte = end;
+        }
+    }
+
+    // Paginated results
+    const result = await SleepEntry.find(query)
+        .sort({ entryDate: -1})
+        .skip(skip)
+        .limit(limit);
+
+    const totalEntries = await SleepEntry.countDocuments(query);
+    const totalPages = Math.ceil(totalEntries / limit);
+
+    return {
+        sleepEntries: result,
+        totalEntries,
+        totalPages,
+        currentPage: page,
+    }
+}
+
+/**
+ * Compute statistics over all sleep entries in an optional date range.
+ * @param userId - ID of the user
+ * @param startDate - optional start date for filtering (inclusive)
+ * @param endDate - optional end date for filtering (inclusive)
+ * @returns {Promise<Object>} - stats object
+ */
+async function getSleepStats(userId, startDate = null, endDate = null) {
+    const query = { userId };
+
+    if (startDate || endDate) {
+        query.entryDate = {};
+        if (startDate) {
+            const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0);
+            query.entryDate.$gte = start;
+        }
+        if (endDate) {
+            const end = new Date(endDate);
+            end.setHours(23, 59, 59, 999);
+            query.entryDate.$lte = end;
+        }
+    }
+
+    const allEntries = await SleepEntry.find(query).sort({ entryDate: 1 });
+
+    let avgDuration = null,
+        bestDay = null,
+        worstDay = null,
+        avgRating = null,
+        totalSleep = 0,
+        stdDev = null;
+
+    if (allEntries.length > 0) {
+        const durations = allEntries.map((e) => e.duration || 0);
+        const ratings = allEntries
+            .map((e) => (typeof e.rating === 'number' ? e.rating : null))
+            .filter((r) => r !== null);
+
+        totalSleep = durations.reduce((a, b) => a + b, 0);
+        avgDuration = totalSleep / durations.length;
+
+        if (durations.length > 1) {
+            const mean = avgDuration;
+            stdDev = Math.sqrt(
+                durations.reduce((sum, d) => sum + Math.pow(d - mean, 2), 0) /
+                    durations.length
+            );
+        } else {
+            stdDev = 0;
+        }
+
+        const max = Math.max(...durations);
+        const min = Math.min(...durations);
+        bestDay = allEntries.find((e) => e.duration === max) || null;
+        worstDay = allEntries.find((e) => e.duration === min) || null;
+
+        if (ratings.length > 0) {
+            avgRating =
+                ratings.reduce((a, b) => a + b, 0) / ratings.length;
+        }
+    }
+
+    return {
+        avgDuration,
+        bestDay,
+        worstDay,
+        avgRating,
+        totalSleep,
+        stdDev,
+    };
+}
+
+/**
+ * Get a sleep entry by date for a user.
+ * @param userId - ID of the user object
+ * @param entryDate - date of the sleep entry
+ * @returns {Promise<import('mongoose').Document|null>} - sleep entry object if found
+ */
+async function getSleepEntryByDate(userId, entryDate) {
+    const normalizedDate = parseDate(entryDate, true);
+    return SleepEntry.findOne({ userId, entryDate: normalizedDate });
+}
+
+/**
+ * Export all sleep data for CSV export document download.
+ * @parm userId - ID of the user object
+ */
+async function getAllSleepEntries(userId) {
+    return SleepEntry.find({ userId }).lean();
+}
+
+/**
+ * Get or create a sleep entry for a user by date.
+ * @param {string} userId - ID of the user object
+ * @param {Date} entryData - data for the sleep entry if creating new
+ * @returns {Promise<import('mongoose').Document>} - existing or newly created sleep entry object
+ * @throws {Error} - if validation fails
+ */
+async function getOrCreateSleepEntry(userId, entryData) {
+    // Prepare and validate the entry data
+    const preparedData = prepareSleepEntryData(entryData);
+    
+    // Extract the normalized entry date and keep the rest in setData
+    const { entryDate, ...setData } = preparedData;
+
+    // Find existing or create new sleep entry and return it
+    return SleepEntry.findOneAndUpdate(
+        { userId, entryDate: entryDate },
+        {
+            $setOnInsert: { userId, entryDate: entryDate },
+            $set: setData
+        },
+        { new: true, upsert: true }
+    );
+}
+
+/**
+ * Delete a sleep entry by date for a user.
+ * @param userId - ID of the user object
+ * @param entryDate - date of the sleep entry
+ * @returns {Promise<import('mongoose').Document|null>} - deleted sleep entry object if found
+ */
+async function deleteSleepEntryByDate(userId, entryDate) {
+    const normalizedDate = parseDate(entryDate, true);
+    return SleepEntry.findOneAndDelete({ userId, entryDate: normalizedDate });
+}
+
+/**
+ * Delete all sleep entry for a user.
+ * @param userId - ID of the user object
+ * @returns {Promise<import('mongoose').Document|null>} - deleted sleep entry object if found
+ */
+async function deleteUser(userId) {
+    return SleepEntry.deleteMany({ userId });
+}
+
+
+module.exports = {
+    getSleepEntries,
+    getSleepStats,
+    getSleepEntryByDate,
+    getOrCreateSleepEntry,
+    getAllSleepEntries,
+    deleteSleepEntryByDate,
+    deleteUser,
+};
+
+

@@ -1,0 +1,61 @@
+<%- include('../components/header') %>
+<link rel="stylesheet" href="/css/insightDetails.css">
+
+<main class="insight-detail-page">
+  <div class="insight-detail-shell">
+    <div class="breadcrumb-path" role="navigation" aria-label="Breadcrumb">
+      <a href="/insights" class="breadcrumb-path-link">Insights</a>
+      <span class="breadcrumb-path-sep" aria-hidden="true">›</span>
+      <span class="breadcrumb-path-current"><%= article.title %></span>
+    </div>
+
+    <header class="detail-header">
+      <div class="detail-tags">
+        <% if (article.tags && article.tags.length) { %>
+          <% article.tags.forEach(function(tag){ %>
+            <span class="detail-tag"><%= tag %></span>
+          <% }) %>
+        <% } %>
+      </div>
+      <h1 class="detail-title"><%= article.title %></h1>
+      <div class="detail-meta">
+        <span class="detail-meta-item">
+          <i class="material-icons">account_circle</i>
+          <span><%= article.author %></span>
+        </span>
+        <span class="detail-meta-item">
+          <i class="material-icons">date_range</i>
+          <span><%= article.date %></span>
+        </span>
+        <span class="detail-meta-item">
+          <i class="material-icons">schedule</i>
+          <span><%= article.readTime %></span>
+        </span>
+      </div>
+    </header>
+
+    <div class="detail-hero">
+      <img src="<%= article.image || fallbackImage %>" alt="<%= article.title %>" class="detail-hero-img">
+    </div>
+
+    <% if (article.excerpt) { %>
+      <blockquote class="detail-excerpt">
+        <p><%= article.excerpt %></p>
+      </blockquote>
+    <% } %>
+
+    <article class="detail-body">
+      <%- article.bodyContent %>
+    </article>
+
+    <div class="detail-cta">
+      <p class="cta-text">
+        <a href="/auth/login" class="blue-text">Sign in</a> to check your sleep need today!<br>
+        Don't have an account? <a href="/auth/register" class="blue-text">Create</a> now.<br>
+        Read more at <a href="/insights" class="blue-text">Insights</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<%- include('../components/footer') %>

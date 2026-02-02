@@ -1,0 +1,252 @@
+.dash-shell {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.profile-layout {
+    display: flex;
+    gap: 0;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+.profile-sidebar {
+    flex-shrink: 0;
+    width: 240px;
+    min-width: 240px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 0;
+    height: fit-content;
+    overflow: hidden;
+    line-height: normal;
+}
+
+.profile-sidebar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.profile-sidebar-item {
+    margin: 0;
+    display: block;
+    float: none;
+}
+
+.profile-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #424242;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.profile-sidebar-link:hover {
+    background-color: #f5f5f5;
+    color: #000;
+}
+
+.profile-sidebar-link .material-icons {
+    font-size: 22px;
+    color: #757575;
+    line-height: normal;
+    height: 24px;
+}
+
+.profile-sidebar-item.active .profile-sidebar-link {
+    background-color: #bee3f7;
+    color: #0d47a1;
+}
+
+.profile-sidebar-item.active .profile-sidebar-link .material-icons {
+    color: #0d47a1;
+}
+
+.profile-main {
+    flex: 1;
+    min-width: 0;
+    padding-left: 40px;
+}
+
+@media (max-width: 800px) {
+    .profile-layout {
+        flex-direction: column;
+        padding: 20px 0;
+    }
+
+    .profile-sidebar {
+        width: 100%;
+        position: static;
+    }
+
+    .profile-sidebar-link {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+
+    .profile-main {
+        padding-left: 0;
+        padding-top: 16px;
+    }
+
+    .profile-sidebar {
+        width: 100%;
+    }
+
+    .profile-sidebar-list {
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: center;
+    }
+
+    .profile-sidebar-item {
+        flex: 1;
+        text-align: center;
+        display: flex;
+        align-items: stretch;
+        justify-content: stretch;
+    }
+
+    .profile-sidebar-link {
+        flex: 1;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.card-head h3 {
+    font-size: 32px !important;
+    font-weight: 700;
+    margin-top: 0;
+}
+
+/* Announcement Card Style */
+.message-pill {
+    display: flex;
+    align-item: center;
+    gap: 24px;
+    padding: 8px 14px;
+    margin: 6px 20px;
+    border-radius: 2px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+}
+
+.message-pill-text {
+    border-left: 2px solid #ddd;
+    padding-left: 20px;
+    margin-top: 6px;
+    font-weight: bold;
+}
+
+.message-date {
+    display: inline-flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 12px;
+    color: #555;
+    margin-left: 10px;
+}
+
+.message .year {
+    font-weight: bold;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+
+/* Profile Button Styles */
+.btn-card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 25px;
+    padding: 20px 16px 20px 20px;
+    max-width: 960px;
+}
+
+.btn-card-hello {
+    font-size: 26px !important;
+    font-weight: 760;
+    margin-top: 0;
+    margin-bottom: 0.2rem;
+}
+
+.btn-card-header {
+    font-size: 26px !important;
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 0.2rem;
+
+}
+
+.warn-btn-card {
+    border: 2px solid red;
+    box-shadow: 0 4px 8px 0 rgba(255, 0, 0, 0.2);
+    transition: 0.3s;
+    border-radius: 25px;
+    max-width: 960px;
+    padding: 20px 16px 20px 20px;
+}
+
+/* --- Bulk Delete Modal Styling --- */
+#modal-bulk-delete.modal {
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 450px;
+    max-height: auto;
+    border-radius: 20px !important;
+    overflow: hidden;
+    box-shadow: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.2);
+}
+
+#modal-bulk-delete .modal-content {
+    padding: 30px 24px 10px 24px;
+    text-align: center;
+}
+
+#modal-bulk-delete .modal-content h4 {
+    font-weight: 800;
+    color: #1DB0FF;
+    margin-top: 0;
+    font-size: 1.8rem;
+}
+
+#modal-bulk-delete .modal-content p {
+    font-size: 1.1rem;
+    margin-top: 30px;
+}
+
+#modal-bulk-delete .modal-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 24px 30px 24px;
+    background: transparent;
+    height: auto;
+}
+
+#modal-bulk-delete .btn, 
+#modal-bulk-delete .btn-flat {
+    border-radius: 50px;
+    padding: 0 25px;
+    font-weight: 600;
+}
+
+#modal-bulk-delete .btn-flat.modal-close {
+    border: 1px solid black;
+}

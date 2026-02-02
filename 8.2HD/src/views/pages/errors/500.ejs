@@ -1,0 +1,16 @@
+<%- include('../../components/header') %>
+<main class="error-page">
+  <div class="error-block">
+    <h1 class="error-code">500</h1>
+    <h2 class="error-title"><%= title || 'Internal server error' %></h2>
+    <p class="error-message">Something went wrong on our side. Please try again in a moment or contact support if it keeps happening.</p>
+    <div class="error-actions">
+      <a href="/" class="pill-btn black waves-effect waves-light">
+        Go home
+        <i class="material-icons" aria-hidden="true">home</i>
+      </a>
+    </div>
+  </div>
+</main>
+<%- include('../../components/footer') %>
+

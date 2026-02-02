@@ -1,0 +1,14 @@
+<%- include('../components/header', { isProfileSection: true, isDashboard: true }) %>
+
+<main>
+  <div class="dash-shell">
+    <div class="profile-layout">
+      <%- include('../components/profileSidebar', { activeSection: typeof activeSection !== 'undefined' ? activeSection : 'schedules' }) %>
+      <div class="profile-main">
+        <%- include('../components/schedulesContent') %>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../components/footer') %>

@@ -1,0 +1,611 @@
+/* --- Dashboard Layout & Header Fix --- */
+.dashboard-page {
+    background-color: #fff;
+    padding-top: 20px;
+}
+
+.dash-shell {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 6px;
+}
+
+/* --- Hero Spacing --- */
+.dash-hero {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.dash-sub {
+    font-size: 2.5rem;
+    font-style: italic;
+    font-weight: 700;
+}
+
+/* --- Equal Height Card Fix --- */
+.dash-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.dash-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.dash-card {
+    background: #fff;
+    border-radius: 30px;
+    padding: 30px 40px;
+    border: 1px solid #BEE3F7;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    margin-bottom: 40px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-head h3 {
+    font-size: 32px !important;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 2rem;
+}
+
+.goal-history-card .card-head h3 {
+    font-size: 22px !important;
+}
+
+.preview-card {
+    background-color: #BEE3F7 !important;
+    border: none;
+}
+
+.card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-footer {
+    margin-top: 10px;
+}
+
+/* --- Toggle Style & Width --- */
+.chip-toggle {
+    background: #BEE3F7;
+    border-radius: 100px;
+    padding: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    width: 100%;
+}
+
+.chip-toggle .chip {
+    flex: 1;
+    margin: 0;
+    border-radius: 100px;
+    color: #000 !important;
+    font-weight: 700;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+}
+
+.chip-toggle .chip.active {
+    background: #fff !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Select & Time Input Styling --- */
+.inline-select {
+    display: inline-block;
+    width: auto;
+    height: 38px;
+    border-radius: 8px;
+    padding: 0 10px;
+    background-color: #BEE3F7;
+    border: none;
+    font-weight: 700;
+    outline: none;
+}
+
+.inline-select:focus {
+    border: 1px solid #1DB0FF;
+}
+
+.flex-row-align {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Date row --- */
+.date-row p {
+    margin: 0;
+}
+
+.date-cell {
+    display: flex;
+    align-items: center;
+}
+
+.date-input-inline {
+    height: 38px;
+    border-radius: 8px;
+    padding: 0 10px;
+    background-color: #BEE3F7;
+    border: none;
+    font-weight: 700;
+    outline: none;
+    width: 100%;
+    max-width: 180px;
+    box-sizing: border-box;
+}
+
+.date-input-inline:focus {
+    border: 1px solid #1DB0FF;
+}
+
+/* --- Range Slider Blue Theme --- */
+input[type=range]::-webkit-slider-thumb {
+    background-color: #1DB0FF !important;
+}
+
+input[type=range]::-moz-range-thumb {
+    background-color: #1DB0FF !important;
+}
+
+input[type=range]::-ms-thumb {
+    background-color: #1DB0FF !important;
+}
+
+/* Rate gauge */
+.range-row p {
+    margin: 0;
+}
+
+.range-with-labels {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.range-with-labels .range-field {
+    flex: 1;
+    margin: 0;
+}
+
+.range-end-label {
+    font-weight: 700;
+    color: #000;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* --- Components --- */
+.total-pill {
+    background: #fff;
+    border-radius: 100px;
+    padding: 3px 0;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.main-action-btn {
+    border-radius: 100px;
+    height: 52px;
+    line-height: 52px;
+    text-transform: none;
+    font-weight: 700;
+    padding: 0 40px;
+}
+
+.italic-note {
+    font-style: italic;
+    color: #546e7a;
+}
+
+.strong {
+    font-weight: 800;
+    color: #000;
+}
+
+/* --- Trend Section Styling --- */
+.dash-date-label {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 50px;
+}
+
+#trends-section .graph-wrapper {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+#trends-section .chart-container {
+    max-width: 100%;
+}
+
+#trends-section .trend-view-container {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* --- Goals Section --- */
+.goal-settings-card {
+    background-color: #F7FCFF;
+    /* Reduce bottom margin so the history card sits closer,
+       roughly matching the horizontal gutter between columns */
+    margin-bottom: 24px;
+}
+
+.goal-progress-card {
+    background-color: #BEE3F7;
+    border: none;
+}
+
+.goal-history-card {
+    background-color: #BEE3F7;
+    border: none;
+}
+
+.goal-history-month {
+    font-weight: 600;
+    text-align: left;
+    font-size: 1.1rem;
+}
+
+.goal-history-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    /* Slightly tighter spacing to reduce overall height */
+    gap: 4px 4px;
+}
+
+.goal-history-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.goal-history-cell--placeholder .goal-history-icon,
+.goal-history-cell--placeholder .goal-history-day {
+    visibility: hidden;
+}
+
+.goal-history-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    box-sizing: border-box;
+}
+
+.goal-history-icon .material-icons {
+    font-size: 16px;
+    line-height: 1;
+    height: auto;
+    width: auto;
+}
+
+.goal-history-icon--met {
+    background-color: #E7F9EE;
+    border: 2px solid #16A34A;
+    color: #16A34A;
+}
+
+.goal-history-icon--missed {
+    background-color: #FEE2E2;
+    border: 2px solid #DC2626;
+    color: #DC2626;
+}
+
+.goal-history-icon--empty {
+    background-color: #E5E7EB;
+    border: 2px solid #9CA3AF;
+    color: transparent;
+}
+
+.goal-history-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+
+.goal-history-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.goal-history-day {
+    margin-top: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.goal-progress-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 16px;
+}
+
+.goal-progress-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 999px;
+    padding: 10px 18px;
+    margin-top: 10px;
+}
+
+.goal-progress-label {
+    font-weight: 700;
+}
+
+.goal-progress-value {
+    font-weight: 700;
+}
+
+.goal-progress-tag {
+    margin-left: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.goal-progress-summary {
+    margin-top: 16px;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+.goal-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    text-align: center;
+    color: #546e7a;
+}
+
+.goal-spinner {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    border-top-color: #1DB0FF;
+    animation: goal-spin 0.8s linear infinite;
+    margin-bottom: 12px;
+}
+
+@keyframes goal-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.goal-form {
+    border-radius: 0;
+    border: none;
+    background-color: transparent;
+}
+
+.goal-summary-line {
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+.goal-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.goal-label {
+    font-weight: 700;
+    width: 130px;
+}
+
+.goal-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1DB0FF;
+}
+
+.goal-date {
+    font-weight: bold;
+}
+
+.goal-change-btn {
+    text-transform: none;
+    font-weight: 700;
+}
+
+.goal-error {
+    margin-top: 8px;
+}
+
+.goal-cancel-link {
+    font-weight: 600;
+    color: #374151;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Align the cancel link to the right within the goal form footer */
+.goal-settings-card .card-footer {
+    display: flex;
+    align-items: center;
+}
+
+.goal-settings-card .goal-cancel-link {
+    margin-left: auto;
+}
+
+
+input[type="range"] {
+    margin: 0;
+    position: relative;
+    top: 3px;
+}
+
+input[type="range"] + .thumb {
+    background-color: #1DB0FF;
+    transform-origin: 20% 45% !important;
+
+}
+
+.preview-card h3 {
+    margin-bottom: 10px;
+}
+
+.history-card {
+    margin: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.history-card .card-content {
+    padding: 0;
+}
+
+.history-card tr {
+    background-color: transparent !important;
+}
+
+.history-card th, .history-card td {
+    padding: 5px 5px 5px 0;
+}
+
+.history-card td {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.history-card th:last-child, .history-card td:last-child {
+    padding: 5px 0;
+}
+
+.sleep-history-empty {
+    padding: 1.5rem 0.5rem;
+}
+
+.sleep-history-empty p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+@media (max-width: 800px) {
+
+    .dashboard-page {
+        padding-top: 0;
+        overflow-x: hidden;
+    }
+
+    .dash-shell {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    .dash-hero {
+        padding-top: 0;
+    }
+
+    .dash-sub {
+        margin: 0;
+        font-size: 1.5rem;
+        font-style: italic;
+        font-weight: 700;
+    }
+
+    .dash-card {
+        padding: 20px 25px;
+    }
+
+    .card-head h3 {
+        font-size: 24px !important;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Log form: label on own row, inputs wrap to next row */
+    #log-section .date-row,
+    #log-section .log-view .row,
+    #log-section .range-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #log-section .date-row .col,
+    #log-section .log-view .row .col,
+    #log-section .range-row .col {
+        width: 100% !important;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    #log-section .date-row .col:first-child,
+    #log-section .log-view .row .col:first-child,
+    #log-section .range-row .col:first-child {
+        margin-bottom: 6px;
+    }
+
+    #log-section .range-row .col:nth-child(2) {
+        min-width: 0;
+    }
+
+    #log-section .range-with-labels {
+        min-width: 0;
+    }
+
+    #log-section .range-with-labels .range-field {
+        min-width: 0;
+    }
+
+    /* Your Sleep Trends: fit to viewport on mobile, no horizontal overflow */
+    #trends-section {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    #trends-section .dash-card {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    #trends-section .trend-view-container {
+        min-width: 0;
+    }
+
+    #trends-section .graph-wrapper {
+        min-width: 0;
+    }
+
+    #trends-section .chart-container {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    #trends-section .chip-toggle {
+        max-width: 100%;
+    }
+
+}

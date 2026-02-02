@@ -1,0 +1,35 @@
+<%- include('../components/header', { title: typeof title !== 'undefined' ? title : 'Support Chat', isProfileSection: true }) %>
+
+<main class="main--with-chat">
+    <div class="dash-shell">
+        <div class="profile-layout profile-layout--with-chat">
+            <%- include('../components/profileSidebar', { activeSection: typeof activeSection !== 'undefined' ? activeSection : 'support' }) %>
+            <div class="profile-main profile-main--chat">
+                <div class="support-chat-page">
+                    <div class="messages-container">
+                        <div class="chat-area">
+                            <div class="chat-header">
+                                <h5>Support Chat</h5>
+                            </div>
+                            <div class="messages-area">
+                                <div class="messages-inner" id="messagesArea" aria-live="polite"></div>
+                            </div>
+                            <div class="input-area">
+                                <input
+                                        type="text"
+                                        id="messageInput"
+                                        placeholder="Type a message..."
+                                        aria-label="Message input"
+                                        autocomplete="off"
+                                >
+                                <button type="button" id="sendMessageBtn">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('../components/footer', { isMessages: true }) %>

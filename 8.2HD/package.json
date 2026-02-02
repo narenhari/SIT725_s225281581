@@ -1,0 +1,93 @@
+{
+  "name": "alive",
+  "version": "1.0.0",
+  "description": "Alive Sleep Tracking App",
+  "keywords": [
+    "Sleep",
+    "Tracking",
+    "Medical",
+    "Private",
+    "Auth0",
+    "MongoDB",
+    "Express",
+    "Materialize",
+    "Socket.IO",
+    "Contentful"
+  ],
+  "homepage": "https://github.com/akashjaura16/sleepTrackerApp#readme",
+  "bugs": {
+    "url": "https://github.com/akashjaura16/sleepTrackerApp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akashjaura16/sleepTrackerApp.git"
+  },
+  "license": "ISC",
+  "author": "Team 33",
+  "contributors": [
+    {
+      "name": "Andrej Kudriavcev",
+      "studentID": "s224939307"
+    },
+    {
+      "name": "Akashdeep Singh",
+      "studentID": "s224911605"
+    },
+    {
+      "name": "Mi Vo",
+      "studentID": "s224505179"
+    },
+    {
+      "name": "Naren Madabooshi Onamalai",
+      "studentID": "s225281581"
+    },
+    {
+      "name": "Winston Dang",
+      "studentID": "s222038631"
+    }
+  ],
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "mocha \"tests/**/*.test.js\" --recursive --reporter spec",
+    "test:unit": "mocha \"tests/unit/**/*.test.js\" --recursive --reporter spec",
+    "test:integration": "mocha \"tests/integration/**/*.test.js\" --recursive --reporter spec",
+    "test:smoke": "mocha \"tests/smoke/**/*.test.js\" --recursive --reporter spec",
+    "test:e2e": "playwright test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@contentful/rich-text-html-renderer": "^17.1.6",
+    "@json2csv/plainjs": "^7.0.6",
+    "contentful": "^11.10.1",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^4.18.2",
+    "express-openid-connect": "^2.19.3",
+    "mongoose": "^9.0.2",
+    "node-cron": "^3.0.3",
+    "openai": "^6.16.0",
+    "socket.io": "^4.7.2"
+  },
+  "overrides": {
+    "qs": "6.14.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@playwright/test": "^1.58.0",
+    "chai": "^4.4.1",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.1.0",
+    "mocha": "^11.0.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.8.1",
+    "proxyquire": "^2.1.3",
+    "sinon": "^21.0.1",
+    "socket.io-client": "^4.8.3",
+    "supertest": "^7.0.0"
+  }
+}

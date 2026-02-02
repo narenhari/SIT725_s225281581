@@ -1,0 +1,32 @@
+<%
+  const menu =
+    typeof activeMenu !== 'undefined'
+      ? activeMenu
+      : typeof currentActiveMenu !== 'undefined'
+      ? currentActiveMenu
+      : '';
+%>
+
+<% if (typeof isDashboard !== 'undefined' && isDashboard) { %>
+  <li class="<%= menu === 'log' ? 'active' : '' %>">
+      <a href="#log-section" class="nav-link">Log Sleep</a>
+  </li>
+  <li class="<%= menu === 'trends' ? 'active' : '' %>">
+      <a href="#trends-section" class="nav-link">Trends</a>
+  </li>
+  <li class="<%= menu === 'goals' ? 'active' : '' %>">
+      <a href="#goals-section" class="nav-link">Goal</a>
+  </li>
+
+<% } else { %>
+  <li class="<%= menu === 'home' ? 'active' : '' %>">
+      <a href="/" class="nav-link">Home</a>
+  </li>
+  <li class="<%= menu === 'about' ? 'active' : '' %>">
+      <a href="/about" class="nav-link">About Us</a>
+  </li>
+  <li class="<%= menu === 'insights' ? 'active' : '' %>">
+      <a href="/insights" class="nav-link">Insights</a>
+  </li>
+  
+<% } %>
