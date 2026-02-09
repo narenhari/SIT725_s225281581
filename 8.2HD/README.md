@@ -717,6 +717,9 @@ MongoDB document creation (verified by the return of a unique _id).
 
 ### More info
 
+- Have the repo cloned locally
+
 - The localhost is running in http://localhost:3000
 
 - The rest api route is in http://localhost:3000/api/student and it will show my name and my student id.
+
